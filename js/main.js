@@ -22,8 +22,27 @@ function ingresar(usuario, clave){
 }
 ingresar(usuario, clave)
 
+const menu = ["pizza", "tacos", "empanadas", "sprite", "limonada"]
+console.log(menu)
+
+menu.push("coca-cola")
+console.log("Agregamos nuevas opciones en nuestro menu! Ahora tenemos: " + menu)
+
+const agotado = menu.shift()
+console.log(`Se nos acabo una de las opciones: ${agotado}. Ahora tenemos: ${menu}`)
+
+
+function listarMenuDisponible(lista) {
+  console.log("Opciones del menu actual")
+  for (const producto of lista) {
+    console.log(`Producto: ${producto}`)
+  }
+  console.log(`Total: ${lista.length} productos`)
+}
+listarMenuDisponible(menu)
+
 function comidaCorrecta(comidaElegida){
-    if (comidaElegida === "pizza" || comidaElegida === "tacos" || comidaElegida === "empanadas") {
+    if (menu.includes(comidaElegida)) {
         return comidaElegida
     }else{
         return null
@@ -31,7 +50,7 @@ function comidaCorrecta(comidaElegida){
 }
 
 function bebidaCorrecta(bebidaElegida){
-    if (bebidaElegida === "sprite" || bebidaElegida === "limonada") {
+    if (menu.includes(bebidaElegida)) {
         return bebidaElegida
     }else{
         return null
@@ -43,19 +62,28 @@ function pedidoCorrecto(comidaValidada, bebidaValidada) {
         let ordenCompleta = "Estamos preparando " + comidaValidada + " y " + bebidaValidada
         return ordenCompleta
     } else if (!comidaValidada && bebidaValidada) {
-        let errorComida = "Esa comida no la tenemos, podes elegir pizza, tacos o empanadas. Pero sí tenemos " + bebidaValidada
+        let errorComida = `Esa comida no la tenemos, podes elegir: ${menu}. Pero sí tenemos: ${bebidaValidada}`
         return errorComida
     } else if (comidaValidada && !bebidaValidada) {
-        let errorBebida = "Esa bebida no la tenemos, podes elegir sprite o limonada. Pero sí tenemos " + comidaValidada
+        let errorBebida = `Esa bebida no la tenemos, podes elegir: ${menu}. Pero sí tenemos: ${comidaValidada}`
         return errorBebida
     } else {
         return "No tenemos esas opciones de comida y bebida " + usuario + ", mira nuevamente nuestras opciones"
     }
 }
 
-function hacerPedido() {            
-    let comida = prompt("Escribe que comida deseas pedir (pizza, tacos, empanadas)")                
-    let bebida = prompt("Escribe que bebida deseas pedir (sprite, limonada)")
+function hacerPedido() {
+    let solicitudCliente = prompt("Que te gustaria agregar al menu?")
+    if (menu.includes(solicitudCliente)) {
+    const posicion = menu.indexOf(solicitudCliente)
+    console.log(` "${solicitudCliente}" está en stock, en la posición ${posicion}`)
+    } else {
+        menu.splice(1,1, `${solicitudCliente}`)
+        console.log("Tuvimos unos cambios en el menu, ahora tenemos: " + menu)
+    }            
+
+    let comida = prompt(`Escribe que comida deseas pedir: ${menu}`)                
+    let bebida = prompt(`Escribe que bebida deseas pedir: ${menu}`)
 
     const comidaOk = comidaCorrecta(comida)
     const bebidaOk = bebidaCorrecta(bebida)
@@ -65,7 +93,7 @@ function hacerPedido() {
     return pedidoFinal
 }
 
-function pedidirComida(){
+function pedirComida(){
     if (intentos === 0) {
     console.log("Cuenta bloqueada por demasiados intentos")
     return
@@ -75,7 +103,7 @@ function pedidirComida(){
 }
 
 while (intentos > 0 && confirm("Deseas hacer una orden?")) {
-    pedidirComida()
+    pedirComida()
 }
 if (intentos === 0) {
     alert("Tu cuenta quedó bloqueada por demasiados intentos fallidos al ingresar la contraseña")
