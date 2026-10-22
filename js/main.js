@@ -1,5 +1,5 @@
 alert ("Bienvenido al simulador para pedir comida, crea tu cuenta para poder iniciar sesión y hacer tu pedido")
-
+// logueo
 const usuario = prompt ("Ingresa tu nombre")
 const clave = prompt ("Crea tu contraseña")
 let ingresarClave = ""
@@ -22,16 +22,55 @@ function ingresar(usuario, clave){
 }
 ingresar(usuario, clave)
 
-const menu = ["pizza", "tacos", "empanadas", "sprite", "limonada"]
+// class 
+class Alimento {
+  constructor(id, nombre, precio, enStock) {
+    this.id = id
+    this.nombre = nombre
+    this.precio = parseFloat(precio)
+    this.enStock = enStock
+  }
+
+  sumarGanancia() {
+    this.precio *= 1.5
+  } // cambia los precios
+}
+
+const alimentos = [] // lista que contendra las instancias
+
+const alimento1 = new Alimento("1C", "pizza", 35, true)
+alimentos.push(alimento1)
+const alimento2 = new Alimento("2C", "tacos", 33, true)
+alimentos.push(alimento2)
+const alimento3 = new Alimento("3C", "hamburguesa", 40, false)
+alimentos.push(alimento3)
+const alimento4 = new Alimento("1B", "sprite", 20, true)
+alimentos.push(alimento4)
+const alimento5 = new Alimento("2B", "limonada", 15, true)
+alimentos.push(alimento5)
+const alimento6 = new Alimento("3B", "coca-cola", 20, true)
+alimentos.push(alimento6)
+
+console.log(alimentos)
+console.table(alimentos)
+
+const alimentosMenu = [] // listado de alimentos en stock
+for (const alimento of alimentos) {
+    alimento.sumarGanancia()
+    if(alimento.enStock === true){
+        alimentosMenu.push(alimento.nombre)
+    }
+}
+console.table(alimentos)
+console.log(alimentosMenu)
+
+const menu = alimentosMenu
 console.log(menu)
 
-menu.push("coca-cola")
-console.log("Agregamos nuevas opciones en nuestro menu! Ahora tenemos: " + menu)
-
-const agotado = menu.shift()
+const agotado = menu.shift() // elimina producto agotado
 console.log(`Se nos acabo una de las opciones: ${agotado}. Ahora tenemos: ${menu}`)
 
-
+// funciones para que el usuario realice el pedido
 function listarMenuDisponible(lista) {
   console.log("Opciones del menu actual")
   for (const producto of lista) {
@@ -75,10 +114,11 @@ function pedidoCorrecto(comidaValidada, bebidaValidada) {
 function hacerPedido() {
     let solicitudCliente = prompt("Que te gustaria agregar al menu?")
     if (menu.includes(solicitudCliente)) {
-    const posicion = menu.indexOf(solicitudCliente)
-    console.log(` "${solicitudCliente}" está en stock, en la posición ${posicion}`)
-    } else {
-        menu.splice(1,1, `${solicitudCliente}`)
+        const posicion = menu.indexOf(solicitudCliente)
+        console.log(` "${solicitudCliente}" está en stock, en la posición ${posicion}`)
+    } 
+    else {
+        menu.splice(1,0, `${solicitudCliente}`)
         console.log("Tuvimos unos cambios en el menu, ahora tenemos: " + menu)
     }            
 
@@ -95,13 +135,15 @@ function hacerPedido() {
 
 function pedirComida(){
     if (intentos === 0) {
-    console.log("Cuenta bloqueada por demasiados intentos")
-    return
-}else{
+        console.log("Cuenta bloqueada por demasiados intentos")
+        return
+    }
+    else {
         alert(hacerPedido())
     }
 }
 
+// consultar al usuario si quiere hacer otro pedido
 while (intentos > 0 && confirm("Deseas hacer una orden?")) {
     pedirComida()
 }
